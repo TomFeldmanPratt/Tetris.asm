@@ -31,7 +31,7 @@ timer db 30h,30h,':',30h,30h, '$'
 del db 8,8,8,8,8,8, '$'
 allstarttimeinsec dw ?
 allnewtimeinsec dw ?
-gamespeedloop dw ?
+gamespeedloop dw 6
 CODESEG
 
 proc ReadFromFile
@@ -563,6 +563,7 @@ game:
 	xor dh, dh
 	add ax, dx
 	mov [allstarttimeinsec], ax
+newblock:
 	;call findRandomblock
 	mov [cursqu], 2
 	mov [color], 5
@@ -581,8 +582,6 @@ delayloop:
 	int 15h
 	pop cx
 	loop delayloop
-	
-	
 	mov ax, [x]
 	mov [lastx], ax
 	mov ax, [y]
@@ -602,22 +601,24 @@ isinput:
 	cmp al, 97
 	je left
 	jmp cont1
+newblockpass:
+	jmp newblock
 right:
 	cmp [canmover], 0
-	je cont1
+	je left
 	add [x], 10
 	mov [rot], 10
 	jmp down
 left:
 	cmp [canmovel], 0
-	je cont1
+	je down
     sub [x], 10
 	mov [rot], 5
 	jmp down
 down:
 	cmp [canmoved], 0
-	je cont1                         ;here change after test
-	add [y], 10
+	je newblockpass                         ;here change after test
+	add [y], 10d
 cont1:
 	call printgamescreen
 	jmp gameloop1  
