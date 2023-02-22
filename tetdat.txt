@@ -1,7 +1,6 @@
-bs = 0
-gp = 0
-av = 0
-ac = 0
-$
+best score - 00000
+games played - 000
+avarege score - 00000
+total score - 00000
 
-
+$             
